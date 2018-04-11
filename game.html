@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html>
+ <head>
+    
+   <title>
+      game
+   </title>
+   <style type="text/css">
+		body{
+			margin: 0px;
+			background-image: url("b.png");
+			background-size:100%;
+			background-position-y:58%; 
+			background-attachment: fixed;
+			background-repeat: no-repeat;
+		}
+	</style> 
+     
+	<script type="text/javascript">
+	var leftlimit,rightlimit;
+	var maxperson = 0,mover=[];
+	var boyleft=0,boyright=3,girlleft=0,girlright=3;
+    var div,pos,num,toggle=1,left=6,right=0;
+	function start(){ 
+	let element = [];
+	  leftlimit = parseInt(window.innerWidth*23/100);
+	  rightlimit = parseInt(window.innerWidth*43/100);
+	  
+	  for(i = 0; i < 6 ; i++){ 
+	  element[i] = document.createElement('img');
+        element[i].style.position = 'absolute';
+        element[i].side = 'right';
+		element[i].style.height = parseInt(window.innerHeight/5) + 'px';
+	    element[i].style.width =parseInt(window.innerWidth/20) +'px';
+		element[i].style.top = parseInt(window.innerHeight*81/100) + 'px';
+		element[i].style.left = parseInt(window.innerWidth*68/100) +  i*(window.innerWidth*5/100) +'px';	
+		element[i].pos = 0;
+		element[i].num = i;
+		div = document.getElementById("content");
+		div.appendChild(element[i]);
+			if(i>=3){
+				element[i].src = "girl.png";
+				let elementName = "girl" + (i+1);
+				element[i].id = elementName;
+			
+				element[i].person = 'girl';
+			}
+			else{
+				element[i].src = "boy.png";
+				let elementName = "boy" + (i+1);
+				element[i].id = elementName;
+				element[i].person = 'boy';
+			}
+		element[i].onclick = function(){
+		 moveperson(this);
+
+		}	
+		
+        function moveperson(obj){
+		   if(obj.pos==0){
+     		   obj.pos = 1;
+	           if(maxperson == 0){
+			     if(toggle == 1){							
+					if(obj.side == 'right'){console.log("in main 1");
+						right--;
+						obj.style.top = parseInt(window.innerHeight *81/100) + 'px'; 
+						obj.style.left = parseInt(window.innerWidth *46/100)  +'px';
+						if(obj.person == 'girl'){
+						girlright--;
+	     				}
+						else if(obj.person == 'boy'){
+							boyright--;
+						}
+						}
+                    }
+			     else{
+					if(obj.side== 'left'){
+				   		left--;
+						obj.style.top = parseInt(window.innerHeight *81/100) + 'px';
+						obj.style.left = parseInt(window.innerWidth *24/100)  +'px';
+						if(obj.person == 'girl'){
+							girlleft--;
+						}
+						else if(obj.person == 'boy'){
+							boyleft--;
+						}
+						}
+						}
+				    maxperson++;
+					obj.side = 'boat';				
+					mover[1]=document.getElementById(obj.id);		
+				}		
+               else if(maxperson == 1){
+			      if(toggle == 1){
+						if(obj.side == 'right'){ console.log("in main 2");
+							right--;
+							obj.style.top = parseInt(window.innerHeight * 81/100 )  + 'px';
+							obj.style.left = parseInt(window.innerWidth * 52/100)   + 'px' ;	
+							if(obj.person == 'girl'){
+								girlright--;
+							}
+							else if(obj.person == 'boy'){
+								boyright--;
+							}
+						}
+						}
+						else{
+							if(obj.side== 'left'){
+								left--;
+								obj.style.top = parseInt(window.innerHeight *81/100) + 'px';
+								obj.style.left = parseInt(window.innerWidth *32/100)  +'px';
+								if(obj.person == 'girl'){
+									girlleft--;
+								}
+								else if(obj.person == 'boy'){
+									boyleft--;
+								}					
+							}
+						}
+		    		maxperson++;
+					obj.side = 'boat';				
+					mover[2]=document.getElementById(obj.id); 	
+			   }
+                else{
+				 alert('more than 2 person is not allowed');	
+                 obj.pos=0;				
+				}			   
+		    }
+            else{
+				if(maxperson>0){ 
+					let index;
+					obj.pos = 0;
+					if(toggle == 1){console.log('inside go 1')
+						obj.style.left = parseInt(window.innerWidth *68/100) +  obj.num*(window.innerWidth *5 / 100) +'px';
+						obj.style.top = parseInt(window.innerHeight *81/100) + 'px';
+		      			mover.splice(mover.indexOf(obj),1);
+						obj.side = 'right';
+						right++;
+						if(obj.person == 'girl'){
+							girlright++;
+						}
+						else if(obj.person == 'boy'){
+							boyright++;
+						}
+					check();	
+					}
+					else{ console.log('inside go ' + obj)
+						obj.style.left = parseInt(window.innerWidth* 1/100) +  obj.num*(window.innerWidth *4/100) +'px';
+						obj.style.top = parseInt(window.innerHeight *81/100) + 'px';										
+					//	console.log(mover[1]);
+					//	console.log(mover.indexOf(obj));
+						console.log(mover);
+						mover.splice(mover.indexOf(obj),1);
+						console.log(mover[1]);
+						obj.side = 'left';
+						left++;
+						if(obj.person == 'girl'){
+							girlleft++;
+						}
+						else if(obj.person == 'boy'){
+								boyleft++;
+							}
+						check();	
+					}
+					maxperson--;
+                    console.log(mover); 
+					if(toggle == 1){console.log(mover[1].offsetLeft)
+					if(mover[1].offsetLeft > window.innerWidth*50/100){console.log('inside go3')
+						let id=setInterval(frame,50);console.log('abcs')
+						let x= 	parseInt(window.innerWidth*48/100);
+						let y= 	parseInt(window.innerWidth*48/100);
+						function frame () {
+									if(mover[1].offsetLeft <= window.innerWidth *48/100){
+										clearInterval(id);
+									}
+									else{
+									mover[1].style.left = x--  +'px';		
+									}	
+								}
+						
+							}
+							}
+						else{
+							if(mover[1].offsetLeft > window.innerWidth*27/100){
+								mover[1].style.left = parseInt(window.innerWidth *26/100)  +'px';
+								console.log("mayank");
+								}
+							}
+							
+					}
+				}		
+	            }
+	    }   
+	 boat();
+	}
+	 function boat()
+	 {
+	  let bt=document.createElement('img');
+	  let dv = document.getElementById('boat');
+		bt.style.position = 'absolute';
+		bt.src = "boat.jpg";
+		bt.style.height = parseInt(window.innerHeight *8/100) + 'px';
+		bt.style.width = parseInt(window.innerWidth *17/100) +'px';
+		bt.style.top = parseInt(window.innerHeight*93/100) + 'px';
+		bt.style.left = parseInt(window.innerWidth *45/100)  +'px';
+		bt.id = 'boatPic';
+	   	dv.appendChild(bt);
+	    bt.id = 'boatPic';
+		mover[0] = document.getElementById('boatPic');
+		bt.onclick= function(){
+			moveBoat();
+		}
+		
+		function moveBoat(){
+			check();
+				if(maxperson >0){
+				let id=setInterval(frame,0);
+				function frame(){
+				
+					if(toggle == 1){
+						if(mover[0].offsetLeft > leftlimit){console.log('inside 1')
+							for(let i=0;i<mover.length;i++){
+								mover[i].style.left = mover[i].offsetLeft -1 + 'px';
+							}
+						}
+						else{
+							clearInterval(id);
+							toggle = 0;
+						}
+					}
+					else{
+						if(mover[0].offsetLeft < rightlimit){console.log('inside 258')
+							for(let i=0;i<mover.length;i++){
+								mover[i].style.left = mover[i].offsetLeft + 1 + 'px';
+								
+							}
+						}
+						else{
+							clearInterval(id);
+							//check();
+							toggle = 1;
+						}
+					check();	
+					}
+				}
+			}
+			else{
+				alert('empty boat');
+			}
+		}
+		check();
+	}  
+	function check(){
+	    if((girlright<boyright)||(girlleft<boyleft)&&(girlright!=0)&&(girlleft!=0)){		
+			alert('!You Loose Game Over ');
+			location.reload();
+		}
+		if(girlleft==3 && boyleft==3){
+			alert('Congrats! You Won');
+			location.reload();
+		}
+	
+	}
+	
+	function result(obj)
+	{
+       	
+	}
+	</script>
+   
+ </head>
+
+ <body onload = "start()" >
+ <div id = "content"></div>
+ <div id = "boat" > </div>
+ </body>
+</html>	
